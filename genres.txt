@@ -1,0 +1,31 @@
+Action
+Adventure
+RPG
+Strategy
+Simulation
+Sports
+Racing
+##################################
+Puzzle
+Platformer
+FPS
+JRPG
+Roguelike
+Beat'em up
+City Builder
+Battle Royale
+Side Scroller
+Hack and Slash
+Dungeon Crawler
+Immersive Sim
+Metroidvania
+Souls-like
+CRPG
+ARPG
+RTS
+Fighter
+Looter Shooter
+Tower Defense
+Survival
+Horror
+Survival Horror
