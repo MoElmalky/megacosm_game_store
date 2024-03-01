@@ -62,6 +62,10 @@ flutter:
   assets:
     - assets/
     - assets/rdr2/
+    - assets/starfield/
+    - assets/cp2077/
+    - assets/gow/
+    - assets/control/
   #  - assets/rdr2/rdr2_screenshot-5.jpg
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg

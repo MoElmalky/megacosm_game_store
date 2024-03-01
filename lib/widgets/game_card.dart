@@ -7,41 +7,58 @@ class GameCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      //padding: EdgeInsets.all(10),
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: Color.fromARGB(255, 40, 40, 40),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8),
+      child: InkWell(
+        onTap: () {},
         borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image(image: AssetImage(game.poster), width: 100),
-          Column(
+        splashColor: Colors.black,
+        child: Container(
+          //padding: EdgeInsets.all(10),
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 40, 40, 40),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16,vertical: 16),
-                child: Text(
-                  game.name,
-                  style: TextStyle(color: Colors.white, fontSize: 20,fontWeight: FontWeight.bold),
-                ),
+              Image(
+                image: AssetImage(game.poster),
+                fit: BoxFit.fill,
+                width: 120,
+                height: 150,
               ),
-              Text(
-                game.price,
-                style: TextStyle(color: Colors.white),
-              ),
-              Text(
-                game.developer,
-                style: TextStyle(color: Colors.white),
-              ),
-              Text(
-                game.publisher,
-                style: TextStyle(color: Colors.white),
+              Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    child: Text(
+                      game.name,
+                      style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  Text(
+                    game.price,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  Text(
+                    game.developer,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  Text(
+                    game.publisher,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
