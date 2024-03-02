@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:megacosm_game_store/models/game_model.dart';
 import 'package:megacosm_game_store/data/games_data.dart';
 import 'package:megacosm_game_store/widgets/game_card.dart';
 
