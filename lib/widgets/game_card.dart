@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
+import 'package:megacosm_game_store/utils/price_display.dart';
 import 'package:megacosm_game_store/views/game_page.dart';
-import 'package:megacosm_game_store/widgets/score_display.dart';
+import 'package:megacosm_game_store/utils/score_display.dart';
 
 class GameCard extends StatelessWidget {
   final Game game;
@@ -31,7 +32,7 @@ class GameCard extends StatelessWidget {
             children: [
               Image(
                 image: AssetImage(game.poster),
-                fit: BoxFit.fill,
+                fit: BoxFit.cover,
                 width: 120,
                 height: 150,
               ),
@@ -88,21 +89,12 @@ class GameCard extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.only(left: 15,top: 8),
                     child: Row(
+                      mainAxisAlignment:MainAxisAlignment.spaceBetween,
                       children: [
                         ScoreDisplay(score: game.metascore),
                         Padding(
-                          padding: const EdgeInsets.only(left: 140),
-                          child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 5, vertical: 10),
-                              decoration: BoxDecoration(
-                                color: Colors.black.withAlpha(100),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: Text(
-                                game.price,
-                                style: const TextStyle(color: Colors.white),
-                              )),
+                          padding: const EdgeInsets.only(left: 60),
+                          child: PriceDisplay(price: game.price, sale: game.sale),
                         ),
                       ],
                     ),

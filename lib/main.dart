@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:megacosm_game_store/data/games_data.dart';
-import 'package:megacosm_game_store/widgets/game_card.dart';
+import 'package:megacosm_game_store/views/home_page.dart';
+import 'package:megacosm_game_store/views/test.dart';
+import 'package:megacosm_game_store/widgets/test_widget.dart';
 
 main() {
   runApp(const MyApp());
@@ -9,21 +10,12 @@ main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
-      Color mainBlack = const Color.fromRGBO(16, 16, 16, 1);
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
-      home: Scaffold(
-        backgroundColor: mainBlack,
-          appBar: AppBar(
-            backgroundColor: mainBlack,
-          ),
-          body: ListView.builder(itemBuilder: (context,index){
-            return GameCard(game: games[index]);
-          },itemCount:games.length,))
+      debugShowCheckedModeBanner: false,
+      home: const HomePage(),
+      theme: ThemeData.dark()
     );
   }
 }
