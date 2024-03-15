@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
 import 'package:megacosm_game_store/widgets/game_vertical_card.dart';
 
-class VerticalGameViewer extends StatelessWidget {
+class HorizontalGameViewer extends StatelessWidget {
   final String label;
   final List<Game> list;
-  const VerticalGameViewer({super.key, required this.list, required this.label});
+  const HorizontalGameViewer({super.key, required this.list, required this.label});
 
   @override
   Widget build(BuildContext context) {

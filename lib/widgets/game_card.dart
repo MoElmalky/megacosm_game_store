@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
-import 'package:megacosm_game_store/views/game_page.dart';
 import 'package:megacosm_game_store/utils/score_display.dart';
 
 class GameCard extends StatelessWidget {
@@ -14,9 +13,7 @@ class GameCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
         onTap: () {
-          Navigator.push(context,MaterialPageRoute(builder: (_){
-            return GamePage(game: game);
-          }));
+          Navigator.pushNamed(context,'gamePage',arguments: game);
         },
         borderRadius: BorderRadius.circular(10),
         splashColor: Colors.white.withAlpha(20),

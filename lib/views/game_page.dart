@@ -6,14 +6,14 @@ import 'package:megacosm_game_store/models/game_model.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
 import 'package:megacosm_game_store/utils/score_display.dart';
 import 'package:megacosm_game_store/widgets/auto_carousel_image_slider.dart';
-import 'package:megacosm_game_store/widgets/vertical_game_viewer.dart';
+import 'package:megacosm_game_store/widgets/horizontal_game_viewer.dart';
 
 class GamePage extends StatelessWidget {
-  final Game game;
-  const GamePage({super.key, required this.game});
+  const GamePage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Game game = ModalRoute.of(context)!.settings.arguments as Game;
     return Scaffold(
       appBar: AppBar(
         title: Text(game.name),
@@ -269,7 +269,7 @@ class GamePage extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
-          child: VerticalGameViewer(list: games, label: 'More Like This'),
+          child: HorizontalGameViewer(list: games, label: 'More Like This'),
         )
       ]),
     );
