@@ -3,11 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/data/games_data.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
+import 'package:megacosm_game_store/providers/user_provider.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
 import 'package:megacosm_game_store/utils/score_display.dart';
 import 'package:megacosm_game_store/utils/user_option_drawer.dart';
 import 'package:megacosm_game_store/widgets/auto_carousel_image_slider.dart';
 import 'package:megacosm_game_store/widgets/horizontal_game_viewer.dart';
+import 'package:megacosm_game_store/widgets/rating_card.dart';
+import 'package:provider/provider.dart';
 
 class GamePage extends StatefulWidget {
   const GamePage({super.key});
@@ -24,7 +27,10 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     Game game = ModalRoute.of(context)!.settings.arguments as Game;
-    bool isGameInCart = gamesInCart.any((e) {
+    bool isGameInCart = context.watch<UserProvider>().user!.cart!.any((e) {
+      return e.gameId.compareTo(game.gameId) == 0;
+    });
+    bool isGameInWishlist = context.watch<UserProvider>().user!.wishlist!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
     return Scaffold(
@@ -129,7 +135,7 @@ class _GamePageState extends State<GamePage> {
                                 isGameInCart
                                     ? Navigator.pushReplacementNamed(
                                         context, 'cartPage')
-                                    : gamesInCart.add(game);
+                                    : context.read<UserProvider>().addGameToCart(game);
                               });
                             },
                             child: Container(
@@ -163,7 +169,13 @@ class _GamePageState extends State<GamePage> {
                           ),
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              isGameInWishlist?
+                            context.read<UserProvider>().removeGameFromWishlist(game):
+                            context.read<UserProvider>().addGameToWishlist(game);
+                            });
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
@@ -180,12 +192,32 @@ class _GamePageState extends State<GamePage> {
                                 width: 190,
                                 height: 15,
                                 child: Center(
-                                  child: Text(
-                                    'WISHLIST',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      color: Colors.white,
-                                    ),
+                                  child: isGameInWishlist? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.check_circle_outline_sharp,size: 16,),
+                                      SizedBox(width: 5,),
+                                      Text(
+                                        'IN WISHLIST',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
+                                  ):Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Icon(Icons.add_circle_outline_sharp,size: 16,),
+                                      SizedBox(width: 5,),
+                                      Text(
+                                        'WISHLIST',
+                                        style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -342,7 +374,8 @@ class _GamePageState extends State<GamePage> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: HorizontalGameViewer(list: games, label: 'More Like This'),
-        )
+        ),
+        RatingCard(game: game)
       ]),
     );
   }

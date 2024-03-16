@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:megacosm_game_store/providers/rating_provider.dart';
 import 'package:megacosm_game_store/providers/user_provider.dart';
 import 'package:megacosm_game_store/views/cart_page.dart';
 import 'package:megacosm_game_store/views/game_page.dart';
@@ -19,7 +20,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: [ChangeNotifierProvider(create: (context) => UserProvider())],
+      providers: [
+        ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => RatingProvider())
+      ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
           routes: {

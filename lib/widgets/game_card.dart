@@ -1,10 +1,11 @@
 // ignore_for_file: prefer_const_constructors, no_logic_in_create_state
 
 import 'package:flutter/material.dart';
-import 'package:megacosm_game_store/data/games_data.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
+import 'package:megacosm_game_store/providers/user_provider.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
 import 'package:megacosm_game_store/utils/score_display.dart';
+import 'package:provider/provider.dart';
 
 class GameCard extends StatefulWidget {
   final Game game;
@@ -19,10 +20,10 @@ class _GameCardState extends State<GameCard> {
   _GameCardState(this.game);
   @override
   Widget build(BuildContext context) {
-    bool isGameInCart = gamesInCart.any((e) {
+    bool isGameInCart = context.watch<UserProvider>().user!.cart!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
-    bool isGameInWishlist = gamesInWishlist.any((e) {
+    bool isGameInWishlist = context.watch<UserProvider>().user!.wishlist!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
     return Padding(
@@ -123,8 +124,8 @@ class _GameCardState extends State<GameCard> {
                                 onTap: () {
                                   setState(() {
                                     isGameInWishlist?
-                                    gamesInWishlist.remove(game):
-                                    gamesInWishlist.add(game);
+                                    context.read<UserProvider>().removeGameFromWishlist(game):
+                                    context.read<UserProvider>().addGameToWishlist(game);
                                   });
                                 },
                                 child: Container(
@@ -149,7 +150,7 @@ class _GameCardState extends State<GameCard> {
                                     isGameInCart
                                         ? Navigator.pushReplacementNamed(
                                             context, 'cartPage')
-                                        : gamesInCart.add(game);
+                                        : context.read<UserProvider>().addGameToCart(game);
                                   });
                                 },
                                 child: Container(

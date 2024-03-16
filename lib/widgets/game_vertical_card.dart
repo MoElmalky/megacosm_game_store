@@ -1,9 +1,10 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:flutter/material.dart';
-import 'package:megacosm_game_store/data/games_data.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
+import 'package:megacosm_game_store/providers/user_provider.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
+import 'package:provider/provider.dart';
 
 class GameVerticalCard extends StatefulWidget {
   final Game game;
@@ -20,7 +21,7 @@ class _GameVerticalCardState extends State<GameVerticalCard> {
   _GameVerticalCardState(this.game);
   @override
   Widget build(BuildContext context) {
-    bool isGameInWishlist = gamesInWishlist.any((e) {
+    bool isGameInWishlist = context.watch<UserProvider>().user!.wishlist!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
     return Container(
@@ -43,8 +44,8 @@ class _GameVerticalCardState extends State<GameVerticalCard> {
                     onTap: () {
                       setState(() {
                         isGameInWishlist
-                            ? gamesInWishlist.remove(game)
-                            : gamesInWishlist.add(game);
+                            ? context.read<UserProvider>().removeGameFromWishlist(game)
+                            : context.read<UserProvider>().addGameToWishlist(game);
                       });
                     },
                     child: Container(

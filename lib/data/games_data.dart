@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
+import 'package:megacosm_game_store/models/rating_model.dart';
 
 List<Game> games = [
   //Red Dead Redemption 2
@@ -25,7 +26,15 @@ List<Game> games = [
       genresId: ["a1", "a2"],
       mainColor: Colors.red,
       description:
-          "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive. As deepening internal divisions threaten to tear the gang apart, Arthur must make a choice between his own ideals and loyalty to the gang who raised him."),
+          "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive. As deepening internal divisions threaten to tear the gang apart, Arthur must make a choice between his own ideals and loyalty to the gang who raised him.",
+      ratings: [
+        Rating(
+          rating: 5,
+          comment: 'best game ever',
+          username: 'no one'
+        )
+      ] 
+      ),
   //Starfield
   Game(
       name: "Starfield",
@@ -48,7 +57,9 @@ List<Game> games = [
       genres: ["Action", "RPG"],
       genresId: ["a1", "r1"],
       description:
-          "In the year 2330, humanity has ventured beyond our solar system, settling new planets, and living as a spacefaring people. You will join Constellation - the last group of space explorers seeking rare artifacts throughout the galaxy - and navigate the vast expanse of space in Bethesda Game Studios' biggest and most ambitious game."),
+          "In the year 2330, humanity has ventured beyond our solar system, settling new planets, and living as a spacefaring people. You will join Constellation - the last group of space explorers seeking rare artifacts throughout the galaxy - and navigate the vast expanse of space in Bethesda Game Studios' biggest and most ambitious game.",
+      ratings: []    
+          ),
   //Cyberpunk 2077
   Game(
       name: "Cyberpunk 2077",
@@ -72,7 +83,9 @@ List<Game> games = [
       genresId: ["a1", "r1"],
       mainColor: Colors.yellow,
       description:
-          "Cyberpunk 2077 is an open-world, action-adventure RPG set in Night City, a megalopolis obsessed with power, glamour, and body modification. Play as V, a cyberpunk mercenary, and take on the most powerful forces of the city in a fight for glory and survival. Legends will be made here. What will yours be?"),
+          "Cyberpunk 2077 is an open-world, action-adventure RPG set in Night City, a megalopolis obsessed with power, glamour, and body modification. Play as V, a cyberpunk mercenary, and take on the most powerful forces of the city in a fight for glory and survival. Legends will be made here. What will yours be?",
+      ratings: []    
+          ),
   //God of War
   Game(
       name: "God of War",
@@ -95,7 +108,9 @@ List<Game> games = [
       genres: ["Action", "Adventure"],
       genresId: ["a1", "a2"],
       description:
-          "His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods and monsters. It is in this harsh, unforgiving world that he must fight to survive… and teach his son to do the same."),
+          "His vengeance against the Gods of Olympus years behind him, Kratos now lives as a man in the realm of Norse Gods and monsters. It is in this harsh, unforgiving world that he must fight to survive… and teach his son to do the same.",
+      ratings: []    
+          ),
   //Control
   Game(
       name: "Control",
@@ -119,8 +134,7 @@ List<Game> games = [
       genresId: ["a1", "a2"],
       mainColor: Colors.red,
       description:
-          "Control is Jesse Faden’s story and her personal search for answers as she grows into the role of the Director. The world of Control has its own story, as do the allies Jesse meets along the way. Jesse works with other Bureau agents and discovers strange experiments and secrets."),
+          "Control is Jesse Faden’s story and her personal search for answers as she grows into the role of the Director. The world of Control has its own story, as do the allies Jesse meets along the way. Jesse works with other Bureau agents and discovers strange experiments and secrets.",
+      ratings: []    
+          ),
 ];
-
-List<Game> gamesInCart = [];
-List<Game> gamesInWishlist = [];

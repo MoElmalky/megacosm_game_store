@@ -1,5 +1,6 @@
 //import 'package:flutter/material.dart';
 import 'package:flutter/material.dart';
+import 'package:megacosm_game_store/models/rating_model.dart';
 
 class Game {
   String name;
@@ -17,6 +18,8 @@ class Game {
   List<String> screenShots;
   Color mainColor;
   String description;
+  List<Rating>? ratings;
+  int? totalRatings;
   Game({
     required this.name,
     required this.developer,
@@ -33,5 +36,6 @@ class Game {
     required this.screenShots,
     this.mainColor =  const Color.fromRGBO(25, 118, 210, 1),
     this.description = "",
+    this.ratings,
   });
 }

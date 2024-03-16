@@ -20,6 +20,13 @@ class _LoginPageState extends State<LoginPage> {
     bool isValid(String email, String password) {
       passwordValidation = '';
       emailValidation = '';
+      if(email.isEmpty){
+        emailValidation = 'This Field Cannot be Empty.';
+        return false;
+      }else if(password.isEmpty){
+        passwordValidation = 'This Field Cannot be Empty.';
+        return false;
+      }
       return users.any((user) {
         if (user.email.compareTo(email) == 0) {
           if (user.password == password) {
@@ -52,7 +59,8 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: "Email",
                   ),
                 ),
-                Text(emailValidation),
+                Text(emailValidation,
+                  style: TextStyle(color: Colors.red),),
               ],
             ),
           ),
@@ -66,7 +74,8 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: "Password",
                   ),
                 ),
-                Text(passwordValidation),
+                Text(passwordValidation,
+                  style: TextStyle(color: Colors.red),),
               ],
             ),
           ),

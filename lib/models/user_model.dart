@@ -18,7 +18,11 @@ class User {
       required this.password,
       this.cart,
       this.wishlist,
-      this.library});
+      this.library}){
+        cart ??= [];
+        wishlist ??= [];
+        library ??=[];
+      }
 }
 
 List<User> users = [

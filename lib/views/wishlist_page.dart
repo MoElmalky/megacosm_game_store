@@ -1,7 +1,9 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:megacosm_game_store/providers/user_provider.dart';
 import 'package:megacosm_game_store/utils/user_option_drawer.dart';
+import 'package:provider/provider.dart';
 
 class WishlistPage extends StatelessWidget {
   const WishlistPage({super.key});
@@ -46,6 +48,9 @@ class WishlistPage extends StatelessWidget {
         body: Column(
           children: [ 
             Text('Wishlist'),
+            ...context.watch<UserProvider>().user!.wishlist!.map((e) {
+              return Image.asset(e.poster,width: 160,height: 200,fit:BoxFit.fill,);
+            }).toList(),
           ],
         ),
     );

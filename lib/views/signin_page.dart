@@ -13,9 +13,11 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  String usernameAvailability = '';
-  String emailExistence = '';
-  String passwordMatching = '';
+  String usernameAlert = '';
+  String firstNameAlert = '';
+  String emailAlert = '';
+  String passwordAlert = '';
+  String confirmationAlert = '';
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
@@ -26,15 +28,30 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     bool addUser(String firstName, String lastName, String username,
         String email, String password, String confirmation) {
-      usernameAvailability = '';
-      emailExistence = '';
-      passwordMatching = '';
+      usernameAlert = '';
+      emailAlert = '';
+      passwordAlert = '';
+      firstNameAlert = '';
+      confirmationAlert = '';
       return users.any((user) {
+        if (firstName.isEmpty) {
+          firstNameAlert = 'This Field Is Required';
+          return false;
+        } else if (username.isEmpty) {
+          usernameAlert = 'This Field Is Required';
+          return false;
+        } else if (email.isEmpty) {
+          emailAlert = 'This Field Is Required';
+          return false;
+        } else if (password.length < 7) {
+          passwordAlert = 'Password must be at least 6 letters long!';
+          return false;
+        }
         if (user.username.compareTo(username) == 0) {
-          usernameAvailability = 'Username not Available ,Try Something else!';
+          usernameAlert = 'Username not Available ,Try Something else!';
           return false;
         } else if (user.email.compareTo(email) == 0) {
-          emailExistence = 'Email already exists ,Do you want to login?';
+          emailAlert = 'Email already exists ,Do you want to login?';
           return false;
         } else if (password.compareTo(confirmation) == 0) {
           users.add(User(
@@ -42,11 +59,12 @@ class _SignInPageState extends State<SignInPage> {
               lastName: lastName,
               username: username,
               email: email,
-              password: password));
+              password: password,
+              ));
           context.read<UserProvider>().changeUser(users.last);
           return true;
         } else {
-          passwordMatching = 'Password does not Match.';
+          confirmationAlert = 'Password doesn\'t Match.';
           return false;
         }
       });
@@ -61,11 +79,19 @@ class _SignInPageState extends State<SignInPage> {
               Expanded(
                 child: SizedBox(
                   height: 100,
-                  child: TextFormField(
-                    controller: firstNameController,
-                    decoration: InputDecoration(
-                      labelText: "First Name",
-                    ),
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: firstNameController,
+                        decoration: InputDecoration(
+                          labelText: "First Name",
+                        ),
+                      ),
+                      Text(
+                        firstNameAlert,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -92,7 +118,10 @@ class _SignInPageState extends State<SignInPage> {
                     labelText: "Username",
                   ),
                 ),
-                Text(usernameAvailability),
+                Text(
+                  usernameAlert,
+                  style: TextStyle(color: Colors.red),
+                ),
               ],
             ),
           ),
@@ -106,7 +135,10 @@ class _SignInPageState extends State<SignInPage> {
                     labelText: "Email",
                   ),
                 ),
-                Text(emailExistence),
+                Text(
+                  emailAlert,
+                  style: TextStyle(color: Colors.red),
+                ),
               ],
             ),
           ),
@@ -119,6 +151,10 @@ class _SignInPageState extends State<SignInPage> {
                   decoration: InputDecoration(
                     labelText: "Password",
                   ),
+                ),
+                Text(
+                  passwordAlert,
+                  style: TextStyle(color: Colors.red),
                 ),
               ],
             ),
@@ -133,7 +169,10 @@ class _SignInPageState extends State<SignInPage> {
                     labelText: "Confirm Password",
                   ),
                 ),
-                Text(passwordMatching),
+                Text(
+                  confirmationAlert,
+                  style: TextStyle(color: Colors.red),
+                ),
               ],
             ),
           ),
@@ -149,6 +188,21 @@ class _SignInPageState extends State<SignInPage> {
                     confirmPasswordController.text)) {
                   Navigator.pushReplacementNamed(context, 'homePage');
                 }
+              });
+            },
+            child: Container(
+              color: Colors.blue,
+              width: 200,
+              height: 50,
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          InkWell(
+            onTap: () {
+              setState(() {
+                Navigator.pushReplacementNamed(context, 'loginPage');
               });
             },
             child: Container(
