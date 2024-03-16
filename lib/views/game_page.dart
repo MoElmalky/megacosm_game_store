@@ -5,19 +5,64 @@ import 'package:megacosm_game_store/data/games_data.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
 import 'package:megacosm_game_store/utils/score_display.dart';
+import 'package:megacosm_game_store/utils/user_option_drawer.dart';
 import 'package:megacosm_game_store/widgets/auto_carousel_image_slider.dart';
 import 'package:megacosm_game_store/widgets/horizontal_game_viewer.dart';
 
-class GamePage extends StatelessWidget {
+class GamePage extends StatefulWidget {
   const GamePage({super.key});
+
+  @override
+  State<GamePage> createState() => _GamePageState();
+}
+
+class _GamePageState extends State<GamePage> {
+  Future<void> showLoading() async {
+    await Future.delayed(const Duration(seconds: 2));
+  }
 
   @override
   Widget build(BuildContext context) {
     Game game = ModalRoute.of(context)!.settings.arguments as Game;
+    bool isGameInCart = gamesInCart.any((e) {
+      return e.gameId.compareTo(game.gameId) == 0;
+    });
     return Scaffold(
-      appBar: AppBar(
-        title: Text(game.name),
-      ),
+      endDrawer: UserOptionsDrawer(),
+        backgroundColor: Color.fromRGBO(16, 16, 16, 1),
+        appBar: AppBar(
+          backgroundColor: Color.fromRGBO(16, 16, 16, 1),
+          surfaceTintColor: Color.fromRGBO(16, 16, 16, 1),
+          title: Row(
+            children: [
+              ImageIcon(
+                AssetImage('assets/blackRay/blackRay_logo_white.png'),
+                size: 40,
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top:8),
+                child: Image.asset('assets/blackRay/blackRay_white.png',width: 100,fit: BoxFit.cover,),
+              ),
+            ],
+          ),
+          actions: [
+            Builder(
+              builder: (context) => IconButton(
+                onPressed: () {
+                  Scaffold.of(context).openEndDrawer();
+                },
+                icon: Icon(
+                  Icons.view_headline_sharp,
+                  size: 30,
+                  color: Colors.grey[100],
+                ),
+              ),
+            ),
+          ],
+        ),
       body: ListView(children: [
         Container(
           margin: EdgeInsets.symmetric(vertical: 20),
@@ -43,77 +88,104 @@ class GamePage extends StatelessWidget {
                           sale: game.sale,
                           color: game.mainColor,
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          margin: EdgeInsets.only(top: 10),
-                          decoration: BoxDecoration(
-                              color: game.mainColor,
-                              borderRadius: BorderRadius.circular(5)),
-                          child: Center(
-                            child: SizedBox(
-                              width: 190,
-                              height: 20,
-                              child: Center(
-                                child: Text(
-                                  'BUY NOW',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                        InkWell(
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            margin: EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                                color: game.mainColor,
+                                borderRadius: BorderRadius.circular(5)),
+                            child: Center(
+                              child: SizedBox(
+                                width: 190,
+                                height: 20,
+                                child: Center(
+                                  child: Text(
+                                    'BUY NOW',
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          margin: EdgeInsets.only(top: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Colors.white,
-                            ),
-                          ),
-                          child: Center(
-                            child: SizedBox(
-                              width: 190,
-                              height: 20,
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Material(
+                          child: InkWell(
+                            onTap: () {
+                              CircularProgressIndicator();
+                                TextButton(
+                                  onPressed: () => showLoading(),
+                                  child: Text('Show Loading'),
+                                );
+                              setState(() {
+                                isGameInCart
+                                    ? Navigator.pushReplacementNamed(
+                                        context, 'cartPage')
+                                    : gamesInCart.add(game);
+                              });
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
+                              decoration: BoxDecoration(
+                                color: Colors.transparent,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Colors.white,
+                                ),
+                              ),
                               child: Center(
-                                child: Text(
-                                  'ADD TO CART',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold),
+                                child: SizedBox(
+                                  width: 190,
+                                  height: 20,
+                                  child: Center(
+                                    child: Text(
+                                      isGameInCart
+                                          ? 'VIEW IN CART'
+                                          : 'ADD TO CART',
+                                      style: TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
                         ),
-                        Container(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                          margin: EdgeInsets.only(top: 10),
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Colors.white,
+                        InkWell(
+                          onTap: () {},
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            margin: EdgeInsets.only(top: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          child: Center(
-                            child: SizedBox(
-                              width: 190,
-                              height: 15,
-                              child: Center(
-                                child: Text(
-                                  'WISHLIST',
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.white,
+                            child: Center(
+                              child: SizedBox(
+                                width: 190,
+                                height: 15,
+                                child: Center(
+                                  child: Text(
+                                    'WISHLIST',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),

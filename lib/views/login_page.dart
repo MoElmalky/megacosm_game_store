@@ -2,6 +2,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/models/user_model.dart';
+import 'package:megacosm_game_store/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -15,6 +17,25 @@ class _LoginPageState extends State<LoginPage> {
   String passwordValidation = "";
   @override
   Widget build(BuildContext context) {
+    bool isValid(String email, String password) {
+      passwordValidation = '';
+      emailValidation = '';
+      return users.any((user) {
+        if (user.email.compareTo(email) == 0) {
+          if (user.password == password) {
+            context.read<UserProvider>().changeUser(user);
+            return true;
+          } else {
+            passwordValidation = "Password is Wrong";
+            return false;
+          }
+        } else {
+          emailValidation = "Email not Found";
+          return false;
+        }
+      });
+    }
+
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
     return Scaffold(
@@ -50,10 +71,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           InkWell(
-            onTap: (){
+            onTap: () {
               setState(() {
-                if(isValid(emailController.text, passwordController.text)){
-                  Navigator.pushReplacementNamed(context,'homePage');
+                if (isValid(emailController.text, passwordController.text)) {
+                  Navigator.pushReplacementNamed(context, 'homePage');
                 }
               });
             },
@@ -62,29 +83,22 @@ class _LoginPageState extends State<LoginPage> {
               width: 200,
               height: 50,
             ),
-          )
+          ),
+          SizedBox(height: 50,),
+          InkWell(
+            onTap: () {
+              setState(() {
+                  Navigator.pushReplacementNamed(context, 'signInPage');
+              });
+            },
+            child: Container(
+              color: Colors.blue,
+              width: 200,
+              height: 50,
+            ),
+          ),
         ]),
       )),
     );
-  }
-
-  bool isValid(String email, String password) {
-    passwordValidation = '';
-    emailValidation = '';
-    bool isPasswordCorrect = false;
-    users.any((element) {
-      if (element.email.compareTo(email) == 0) {
-        if (element.password == password) {
-          isPasswordCorrect = true;
-        } else {
-          passwordValidation = "Password is Wrong";
-        }
-        return true;
-      } else {
-        emailValidation = "Email not Found";
-        return false;
-      }
-    });
-    return isPasswordCorrect;
   }
 }

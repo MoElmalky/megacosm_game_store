@@ -1,19 +1,35 @@
+// ignore_for_file: prefer_const_constructors, no_logic_in_create_state
+
 import 'package:flutter/material.dart';
+import 'package:megacosm_game_store/data/games_data.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
 import 'package:megacosm_game_store/utils/score_display.dart';
 
-class GameCard extends StatelessWidget {
+class GameCard extends StatefulWidget {
   final Game game;
   const GameCard({super.key, required this.game});
 
   @override
+  State<GameCard> createState() => _GameCardState(game);
+}
+
+class _GameCardState extends State<GameCard> {
+  final Game game;
+  _GameCardState(this.game);
+  @override
   Widget build(BuildContext context) {
+    bool isGameInCart = gamesInCart.any((e) {
+      return e.gameId.compareTo(game.gameId) == 0;
+    });
+    bool isGameInWishlist = gamesInWishlist.any((e) {
+      return e.gameId.compareTo(game.gameId) == 0;
+    });
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context,'gamePage',arguments: game);
+          Navigator.pushReplacementNamed(context, 'gamePage', arguments: game);
         },
         borderRadius: BorderRadius.circular(10),
         splashColor: Colors.white.withAlpha(20),
@@ -24,7 +40,6 @@ class GameCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image(
@@ -36,62 +51,136 @@ class GameCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15,top: 10),
-                    child: SizedBox(
-                      width: 250,
-                      child: Text(
-                        game.name,
-                        style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600),
-                        overflow: TextOverflow.ellipsis,
+                  Row(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 10),
+                            child: SizedBox(
+                              width: 150,
+                              child: Text(
+                                game.name,
+                                style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600),
+                                overflow: TextOverflow.fade,
+                                maxLines: 1,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 15, top: 8),
+                            child: Row(
+                              children: [
+                                ...List.generate(
+                                    game.genres.length,
+                                    (index) => Container(
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 2),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withAlpha(40),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: Text(
+                                            game.genres[index],
+                                            style: const TextStyle(
+                                              fontSize: 10,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                        ))
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 18, top: 8),
+                            child: Text(
+                              game.releaseDate,
+                              style: const TextStyle(color: Colors.white),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15,top: 8),
-                    child: Row(
-                      children: [
-                        ...List.generate(
-                            game.genres.length,
-                            (index) => Container(
-                                  margin:
-                                      const EdgeInsets.symmetric(horizontal: 2),
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
+                      SizedBox(
+                        width: 100,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(5),
+                                onTap: () {
+                                  setState(() {
+                                    isGameInWishlist?
+                                    gamesInWishlist.remove(game):
+                                    gamesInWishlist.add(game);
+                                  });
+                                },
+                                child: Container(
                                   decoration: BoxDecoration(
-                                    color: Colors.white.withAlpha(40),
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    game.genres[index],
-                                    style: const TextStyle(
-                                      fontSize: 10,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ))
-                      ],
-                    ),
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.transparent,
+                                      border: Border.all(
+                                          width: 1.5, color: Colors.white)),
+                                  width: 40,
+                                  height: 30,
+                                  child: Icon(isGameInWishlist?Icons.check:Icons.add),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              child: InkWell(
+                                borderRadius: BorderRadius.circular(5),
+                                onTap: () {
+                                  setState(() {
+                                    isGameInCart
+                                        ? Navigator.pushReplacementNamed(
+                                            context, 'cartPage')
+                                        : gamesInCart.add(game);
+                                  });
+                                },
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      color: Colors.transparent,
+                                      border: Border.all(
+                                          width: 1.5, color: Colors.white)),
+                                  width: 40,
+                                  height: 30,
+                                  child: Icon(isGameInCart
+                                      ? Icons.shopping_cart_checkout_sharp
+                                      : Icons.add_shopping_cart_sharp),
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 18,top: 8),
-                    child: Text(
-                      game.releaseDate,
-                      style: const TextStyle(color: Colors.white),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 15,top: 8),
+                    padding: const EdgeInsets.only(left: 15, top: 8),
                     child: Row(
-                      mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         ScoreDisplay(score: game.metascore),
                         Padding(
                           padding: const EdgeInsets.only(left: 60),
-                          child: PriceDisplay(price: game.price, sale: game.sale),
+                          child:
+                              PriceDisplay(price: game.price, sale: game.sale),
                         ),
                       ],
                     ),

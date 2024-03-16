@@ -121,3 +121,6 @@ List<Game> games = [
       description:
           "Control is Jesse Faden’s story and her personal search for answers as she grows into the role of the Director. The world of Control has its own story, as do the allies Jesse meets along the way. Jesse works with other Bureau agents and discovers strange experiments and secrets."),
 ];
+
+List<Game> gamesInCart = [];
+List<Game> gamesInWishlist = [];
