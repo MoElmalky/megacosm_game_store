@@ -27,6 +27,13 @@ class User {
 
 List<User> users = [
   User(
+    firstName: 'Fast',
+    lastName: 'Access',
+    username: 'dev',
+    email: '1',
+    password: '1',
+  ),
+  User(
     firstName: 'Mohamed',
     lastName: 'Elmalky',
     username: 'Mo_Elmalky',

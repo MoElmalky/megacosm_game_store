@@ -21,62 +21,142 @@ class _RatingCardState extends State<RatingCard> {
   _RatingCardState(this.game);
   TextEditingController test1 = TextEditingController();
   TextEditingController test2 = TextEditingController();
+  int rating = 1;
+  double totalRatings = 0;
   @override
   Widget build(BuildContext context) {
     String username = context.watch<UserProvider>().user!.username;
+    bool rated = game.ratings!.any((e) {
+      return e.username == username;
+    });
     return Container(
       color: Colors.grey[900],
+      padding: EdgeInsets.only(bottom: 10),
+      margin: EdgeInsets.only(bottom: 20),
       child: Column(children: [
-        Row(
-          children: [
-            Expanded(
-              child: SizedBox(
-                height: 100,
-                child: TextFormField(
-                  controller: test1,
-                  decoration: InputDecoration(label: Text('data')),
+        Container(
+          child: Text(totalRatings.toString()),
+        ),
+        rated
+            ? SizedBox()
+            : Container(
+                padding: EdgeInsets.all(10),
+                margin: EdgeInsets.only(top: 10, left: 5, right: 5),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(5),
+                    color: Colors.black26),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          username,
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          children: [
+                            ...List.generate(5, (index) {
+                              return InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      rating = index + 1;
+                                      print(totalRatings);
+                                    });
+                                  },
+                                  child: Icon(
+                                    Icons.star,
+                                    color: rating > index
+                                        ? Colors.white
+                                        : Colors.white24,
+                                  ));
+                            })
+                          ],
+                        )
+                      ],
+                    ),
+                    Divider(),
+                    TextFormField(
+                      cursorColor: Colors.white,
+                      maxLines: null,
+                      controller: test2,
+                      decoration: InputDecoration(
+                          fillColor: Colors.grey[900],
+                          border: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          filled: true,
+                          suffixIcon: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  for (var e in game.ratings!) {
+                                    totalRatings += e.rating;
+                                  }
+                                  totalRatings = double.parse(
+                                      (totalRatings / game.ratings!.length)
+                                          .toStringAsFixed(1));
+                                  context.read<RatingProvider>().addRating(
+                                      game,
+                                      Rating(
+                                          rating: rating,
+                                          comment: test2.text,
+                                          username: username));
+                                });
+                              },
+                              child: Icon(
+                                Icons.send_sharp,
+                                color: Colors.white,
+                              ))),
+                    ),
+                  ],
                 ),
               ),
-            ),
-            Expanded(
-              child: SizedBox(
-                height: 100,
-                child: TextFormField(
-                  controller: test2,
-                  decoration: InputDecoration(label: Text('data')),
+        ...List.generate(game.ratings!.length, (index) {
+          return Container(
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.only(top: 10, left: 5, right: 5),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5), color: Colors.black26),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      game.ratings![index].username,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      children: [
+                        for (int i = 0; i < 5; i++) ...{
+                          if ((game.ratings![index].rating) - i > 0) ...{
+                            Icon(
+                              Icons.star,
+                              color: Colors.white,
+                            )
+                          } else ...{
+                            Icon(
+                              Icons.star,
+                              color: Colors.white24,
+                            )
+                          }
+                        }
+                      ],
+                    )
+                  ],
                 ),
-              ),
+                Divider(),
+                Text(
+                  game.ratings![index].comment,
+                  style: TextStyle(fontSize: 18),
+                )
+              ],
             ),
-          ],
-        ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              Rating rating = Rating(
-                      rating: int.parse(test1.text),
-                      comment: test2.text,
-                      username: username);
-              context.read<RatingProvider>().addRating(
-                  game,
-                  rating);
-            });
-          },
-          child: Container(
-            color: Colors.blue,
-            width: double.infinity,
-            height: 50,
-          ),
-        ),
-        Text(game.ratings!.length.toString()),
-        ...game.ratings!.map((e) {
-          return Column(
-            children: [
-              Text(e.username),
-              Text(e.rating.toString()),
-              Text(e.comment)
-            ],
           );
-        }).toList(),
+        }),
       ]),
     );
   }
