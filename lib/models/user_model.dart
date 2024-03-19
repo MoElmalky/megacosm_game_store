@@ -72,7 +72,7 @@ List<User> users = [
     firstName: 'Mohamed',
     lastName: 'Elmalky',
     username: 'Mo_Elmalky',
-    email: 'elmalkymohamed@gmail.com',
+    email: 'elmalky@gmail.com',
     password: '123456789',
-  )
+  ),
 ];

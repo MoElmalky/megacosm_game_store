@@ -13,100 +13,154 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String emailValidation = "";
-  String passwordValidation = "";
+  var formField = GlobalKey<FormState>();
+  User user = users.first;
+  bool passwordToggle = true;
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    bool isValid(String email, String password) {
-      passwordValidation = '';
-      emailValidation = '';
-      if(email.isEmpty){
-        emailValidation = 'This Field Cannot be Empty.';
-        return false;
-      }else if(password.isEmpty){
-        passwordValidation = 'This Field Cannot be Empty.';
-        return false;
-      }
-      return users.any((user) {
-        if (user.email.compareTo(email) == 0) {
-          if (user.password == password) {
-            context.read<UserProvider>().changeUser(user);
-            return true;
-          } else {
-            passwordValidation = "Password is Wrong";
-            return false;
-          }
-        } else {
-          emailValidation = "Email not Found";
-          return false;
-        }
-      });
-    }
-
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
     return Scaffold(
       body: SafeArea(
-          child: Container(
-        child: Column(children: [
-          SizedBox(
-            height: 100,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: emailController,
-                  decoration: InputDecoration(
-                    labelText: "Email",
-                  ),
-                ),
-                Text(emailValidation,
-                  style: TextStyle(color: Colors.red),),
-              ],
+          child: SingleChildScrollView(
+        child: Form(
+          key: formField,
+          child: Column(children: [
+            SizedBox(
+              height: 30,
             ),
-          ),
-          SizedBox(
-            height: 100,
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: passwordController,
-                  decoration: InputDecoration(
+            Image.asset(
+              'assets/blackRay/blackRay_all_white.png',
+              width: 240,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextFormField(
+                cursorColor: Colors.white,
+                controller: emailController,
+                decoration: InputDecoration(
+                    labelText: "Username/Email",
+                    labelStyle: TextStyle(color: Colors.white),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white))),
+                validator: (value) {
+                  bool emailFound = users.any((user) {
+                    if (user.email.compareTo(value!) == 0) {
+                      this.user = user;
+                      return true;
+                    } else if (user.username.compareTo(value) == 0) {
+                      this.user = user;
+                      return true;
+                    } else {
+                      return false;
+                    }
+                  });
+
+                  if (value!.isEmpty) {
+                    return 'Please, Enter Your Username Or Email.';
+                  } else if (!emailFound) {
+                    return 'Username or Email Not Found';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: TextFormField(
+                obscureText: passwordToggle,
+                cursorColor: Colors.white,
+                controller: passwordController,
+                decoration: InputDecoration(
+                    labelStyle: TextStyle(color: Colors.white),
                     labelText: "Password",
+                    suffixIcon: InkWell(
+                      splashColor: Colors.transparent,
+                        onTap: () {
+                          setState(() {
+                            passwordToggle = !passwordToggle;
+                          });
+                        },
+                        child: Icon(passwordToggle
+                            ? Icons.visibility_sharp
+                            : Icons.visibility_off_sharp)),
+                    border: OutlineInputBorder(),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: Colors.white))),
+                validator: (value) {
+                  if (user.password != value) {
+                    return 'Wrong Password!';
+                  }
+                  return null;
+                },
+              ),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+            InkWell(
+              onTap: () {
+                setState(() {
+                  if (formField.currentState!.validate()) {
+                    context.read<UserProvider>().changeUser(user);
+                    Navigator.pushReplacementNamed(context, 'homePage');
+                  }
+                });
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                width: 180,
+                height: 50,
+                child: Center(
+                  child: Text(
+                    'Login',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
-                Text(passwordValidation,
-                  style: TextStyle(color: Colors.red),),
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  'New To Black Ray?',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+                TextButton(
+                    onPressed: () {
+                      Navigator.pushReplacementNamed(context, 'signInPage');
+                    },
+                    child: Text(
+                      'Sign Up',
+                      style: TextStyle(fontSize: 16, color: Colors.blue),
+                    ))
               ],
-            ),
-          ),
-          InkWell(
-            onTap: () {
-              setState(() {
-                if (isValid(emailController.text, passwordController.text)) {
-                  Navigator.pushReplacementNamed(context, 'homePage');
-                }
-              });
-            },
-            child: Container(
-              color: Colors.blue,
-              width: 200,
-              height: 50,
-            ),
-          ),
-          SizedBox(height: 50,),
-          InkWell(
-            onTap: () {
-              setState(() {
-                  Navigator.pushReplacementNamed(context, 'signInPage');
-              });
-            },
-            child: Container(
-              color: Colors.blue,
-              width: 200,
-              height: 50,
-            ),
-          ),
-        ]),
+            )
+          ]),
+        ),
       )),
     );
   }

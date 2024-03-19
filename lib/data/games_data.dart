@@ -30,7 +30,13 @@ List<Game> games = [
       description:
           "America, 1899. Arthur Morgan and the Van der Linde gang are outlaws on the run. With federal agents and the best bounty hunters in the nation massing on their heels, the gang must rob, steal and fight their way across the rugged heartland of America in order to survive. As deepening internal divisions threaten to tear the gang apart, Arthur must make a choice between his own ideals and loyalty to the gang who raised him.",
       ratings: [
-        Rating(rating: 5, comment: 'best game ever', username: 'no one')
+        Rating(rating: 5, comment: 'I\'m No One , I Have No Opinion.', username: 'No_One'),
+        Rating(rating: 5, comment: 'this game makes me really feel like cowboy.', username: 'Barbie'),
+        Rating(rating: 4, comment: 'Awesome game, but rockstar social club and these companies that make you create an account within an account are a plague on society.', username: 'FreeLotus'),
+        Rating(rating: 5, comment: 'Offer me that deathless death \nGood Game, let me give you my life...', username: 'KissHiss'),
+        Rating(rating: 5, comment: 'Hey , I made this shit.', username: 'Malky'),
+        Rating(rating: 5, comment: 'one of the best no the best single player game of all time', username: 'parkx101'),
+        Rating(rating: 5, comment: 'I Don\'t know what I\'m doing here , I was in the kitchen;\nBut this game is so damn good!', username: 'Kitchen_girl'),
       ]),
   //Starfield -2
   Game(
@@ -762,7 +768,7 @@ List<Game> onSale = games.where((game) {
 }).toList();
 List<Game> newReleases = games
     .where((game) =>
-        (DateTime.parse(game.releaseDate).compareTo(DateTime.utc(2022, 1, 1)) >
+        (DateTime.parse(game.releaseDate).compareTo(DateTime.utc(2023, 1, 1)) >
             0))
     .toList();
 List<Game> topSellers = [
@@ -788,8 +794,10 @@ List<Game> mostPlayed = [
 List<Game> mostPopular = [
   games[17],
   games[8],
+  games[15],
   games[0],
   games[22],
+  games[18],
   games[25],
   games[4],
   games[20],

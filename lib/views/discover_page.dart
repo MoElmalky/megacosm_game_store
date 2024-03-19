@@ -22,11 +22,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
     'Release',
     'Score',
   ];
+  var searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     String selectedSort = context.watch<FilterProvider>().sortTerm;
-    var searchController = TextEditingController();
     return Scaffold(
       endDrawer: UserOptionsDrawer(),
       appBar: BlackRayAppBar(),
