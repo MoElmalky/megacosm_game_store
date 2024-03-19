@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/data/games_data.dart';
 import 'package:megacosm_game_store/models/game_model.dart';
 import 'package:megacosm_game_store/providers/user_provider.dart';
+import 'package:megacosm_game_store/utils/blackRay_app_bar.dart';
 import 'package:megacosm_game_store/utils/price_display.dart';
 import 'package:megacosm_game_store/utils/score_display.dart';
 import 'package:megacosm_game_store/utils/user_option_drawer.dart';
@@ -30,45 +31,18 @@ class _GamePageState extends State<GamePage> {
     bool isGameInCart = context.watch<UserProvider>().user!.cart!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
-    bool isGameInWishlist = context.watch<UserProvider>().user!.wishlist!.any((e) {
+    bool isGameInWishlist =
+        context.watch<UserProvider>().user!.wishlist!.any((e) {
+      return e.gameId.compareTo(game.gameId) == 0;
+    });
+    bool isGameInLibrary =
+        context.watch<UserProvider>().user!.library!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
     return Scaffold(
       endDrawer: UserOptionsDrawer(),
-        backgroundColor: Color.fromRGBO(16, 16, 16, 1),
-        appBar: AppBar(
-          backgroundColor: Color.fromRGBO(16, 16, 16, 1),
-          surfaceTintColor: Color.fromRGBO(16, 16, 16, 1),
-          title: Row(
-            children: [
-              ImageIcon(
-                AssetImage('assets/blackRay/blackRay_logo_white.png'),
-                size: 40,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top:8),
-                child: Image.asset('assets/blackRay/blackRay_white.png',width: 100,fit: BoxFit.cover,),
-              ),
-            ],
-          ),
-          actions: [
-            Builder(
-              builder: (context) => IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-                icon: Icon(
-                  Icons.view_headline_sharp,
-                  size: 30,
-                  color: Colors.grey[100],
-                ),
-              ),
-            ),
-          ],
-        ),
+      backgroundColor: Color.fromRGBO(16, 16, 16, 1),
+      appBar: BlackRayAppBar(),
       body: ListView(children: [
         Container(
           margin: EdgeInsets.symmetric(vertical: 20),
@@ -95,21 +69,37 @@ class _GamePageState extends State<GamePage> {
                           color: game.mainColor,
                         ),
                         InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            isGameInLibrary
+                                ? Navigator.pushReplacementNamed(
+                                    context, 'libraryPage')
+                                : Navigator.pushNamed(
+                                    context, 'checkoutPage',arguments: game);
+                          },
                           child: Container(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 10),
                             margin: EdgeInsets.only(top: 10),
-                            decoration: BoxDecoration(
-                                color: game.mainColor,
-                                borderRadius: BorderRadius.circular(5)),
+                            decoration: isGameInLibrary
+                                ? BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(
+                                      color: Colors.white,
+                                    ),
+                                  )
+                                : BoxDecoration(
+                                    color: game.mainColor,
+                                    borderRadius: BorderRadius.circular(5)),
                             child: Center(
                               child: SizedBox(
                                 width: 190,
                                 height: 20,
                                 child: Center(
                                   child: Text(
-                                    'BUY NOW',
+                                    isGameInLibrary
+                                        ? 'VIEW IN LIBRARY'
+                                        : 'BUY NOW',
                                     style: TextStyle(
                                         fontSize: 16,
                                         color: Colors.white,
@@ -127,15 +117,19 @@ class _GamePageState extends State<GamePage> {
                           child: InkWell(
                             onTap: () {
                               CircularProgressIndicator();
-                                TextButton(
-                                  onPressed: () => showLoading(),
-                                  child: Text('Show Loading'),
-                                );
+                              TextButton(
+                                onPressed: () => showLoading(),
+                                child: Text('Show Loading'),
+                              );
                               setState(() {
                                 isGameInCart
                                     ? Navigator.pushReplacementNamed(
                                         context, 'cartPage')
-                                    : context.read<UserProvider>().addGameToCart(game);
+                                    : isGameInLibrary?
+                                    Navigator.pushReplacementNamed(context, 'libraryPage'):
+                                    context
+                                        .read<UserProvider>()
+                                        .addGameToCart(game);
                               });
                             },
                             child: Container(
@@ -155,7 +149,9 @@ class _GamePageState extends State<GamePage> {
                                   child: Center(
                                     child: Text(
                                       isGameInCart
-                                          ? 'VIEW IN CART'
+                                          ? 'VIEW IN CART':
+                                          isGameInLibrary?
+                                          'VIEW IN LIBRARY'
                                           : 'ADD TO CART',
                                       style: TextStyle(
                                           fontSize: 16,
@@ -171,9 +167,13 @@ class _GamePageState extends State<GamePage> {
                         InkWell(
                           onTap: () {
                             setState(() {
-                              isGameInWishlist?
-                            context.read<UserProvider>().removeGameFromWishlist(game):
-                            context.read<UserProvider>().addGameToWishlist(game);
+                              isGameInWishlist
+                                  ? context
+                                      .read<UserProvider>()
+                                      .removeGameFromWishlist(game)
+                                  : context
+                                      .read<UserProvider>()
+                                      .addGameToWishlist(game);
                             });
                           },
                           child: Container(
@@ -192,33 +192,47 @@ class _GamePageState extends State<GamePage> {
                                 width: 190,
                                 height: 15,
                                 child: Center(
-                                  child: isGameInWishlist? Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.check_circle_outline_sharp,size: 16,),
-                                      SizedBox(width: 5,),
-                                      Text(
-                                        'IN WISHLIST',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.white,
+                                  child: isGameInWishlist
+                                      ? Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.check_circle_outline_sharp,
+                                              size: 16,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              'IN WISHLIST',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.add_circle_outline_sharp,
+                                              size: 16,
+                                            ),
+                                            SizedBox(
+                                              width: 5,
+                                            ),
+                                            Text(
+                                              'WISHLIST',
+                                              style: TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
-                                  ):Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Icon(Icons.add_circle_outline_sharp,size: 16,),
-                                      SizedBox(width: 5,),
-                                      Text(
-                                        'WISHLIST',
-                                        style: TextStyle(
-                                          fontSize: 12,
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
                                 ),
                               ),
                             ),

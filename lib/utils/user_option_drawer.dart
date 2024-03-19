@@ -42,7 +42,9 @@ class UserOptionsDrawer extends StatelessWidget {
                 ),
                 InkWell(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, 'homePage');
+                    if (ModalRoute.of(context)!.settings.name != 'homePage') {
+                      Navigator.pushReplacementNamed(context, 'homePage');
+                    }
                   },
                   child: SizedBox(
                     width: 220,
@@ -67,7 +69,9 @@ class UserOptionsDrawer extends StatelessWidget {
                 Divider(),
                 InkWell(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, 'cartPage');
+                    if (ModalRoute.of(context)!.settings.name != 'discoverPage') {
+                      Navigator.pushReplacementNamed(context, 'discoverPage');
+                    }
                   },
                   child: SizedBox(
                     width: 220,
@@ -75,14 +79,11 @@ class UserOptionsDrawer extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.shopping_cart_sharp,
+                          Icons.search,
                           size: 30,
                         ),
-                        SizedBox(
-                          width: 5,
-                        ),
                         Text(
-                          'Cart',
+                          'Discover',
                           style: TextStyle(fontSize: 18),
                         ),
                       ],
@@ -92,7 +93,62 @@ class UserOptionsDrawer extends StatelessWidget {
                 Divider(),
                 InkWell(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, 'wishlistPage');
+                    if (ModalRoute.of(context)!.settings.name != 'cartPage') {
+                      Navigator.pushReplacementNamed(context, 'cartPage');
+                    }
+                  },
+                  child: SizedBox(
+                    width: 220,
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.shopping_cart_sharp,
+                              size: 30,
+                            ),
+                            Text(
+                              'Cart',
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        context.watch<UserProvider>().user!.cart!.isEmpty
+                            ? SizedBox(
+                                width: 5,
+                              )
+                            : Container(
+                                padding: EdgeInsets.symmetric(horizontal: 5),
+                                margin: EdgeInsets.symmetric(horizontal: 5),
+                                decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(20)),
+                                child: Text(
+                                  context
+                                      .watch<UserProvider>()
+                                      .user!
+                                      .cart!
+                                      .length
+                                      .toString(),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+                Divider(),
+                InkWell(
+                  onTap: () {
+                    if (ModalRoute.of(context)!.settings.name !=
+                        'wishlistPage') {
+                      Navigator.pushReplacementNamed(context, 'wishlistPage');
+                    }
                   },
                   child: SizedBox(
                     width: 220,
@@ -100,7 +156,7 @@ class UserOptionsDrawer extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(
-                          Icons.add_circle_outline_sharp,
+                          Icons.favorite_sharp,
                           size: 30,
                         ),
                         SizedBox(
@@ -117,7 +173,10 @@ class UserOptionsDrawer extends StatelessWidget {
                 Divider(),
                 InkWell(
                   onTap: () {
-                    Navigator.pushReplacementNamed(context, 'libraryPage');
+                    if (ModalRoute.of(context)!.settings.name !=
+                        'libraryPage') {
+                      Navigator.pushReplacementNamed(context, 'libraryPage');
+                    }
                   },
                   child: SizedBox(
                     width: 220,
@@ -144,20 +203,16 @@ class UserOptionsDrawer extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(vertical: 15),
               //color: Colors.grey[700],
-              width: 220,
+              width: 223,
               height: 50,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                        ),
+                      Icon(
+                        Icons.account_circle_sharp,
+                        size: 50,
                       ),
                       SizedBox(
                         width: 5,
@@ -174,18 +229,26 @@ class UserOptionsDrawer extends StatelessWidget {
                               children: [
                                 SizedBox(
                                   child: Text(
-                                    context.watch<UserProvider>().user!.firstName,
+                                    context
+                                        .watch<UserProvider>()
+                                        .user!
+                                        .firstName,
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
-                                SizedBox(width: 5,),
+                                SizedBox(
+                                  width: 5,
+                                ),
                                 Expanded(
                                   child: SizedBox(
                                     child: Text(
-                                      context.watch<UserProvider>().user!.lastName,
+                                      context
+                                          .watch<UserProvider>()
+                                          .user!
+                                          .lastName,
                                       style: TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold),

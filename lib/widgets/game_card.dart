@@ -23,7 +23,12 @@ class _GameCardState extends State<GameCard> {
     bool isGameInCart = context.watch<UserProvider>().user!.cart!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
-    bool isGameInWishlist = context.watch<UserProvider>().user!.wishlist!.any((e) {
+    bool isGameInWishlist =
+        context.watch<UserProvider>().user!.wishlist!.any((e) {
+      return e.gameId.compareTo(game.gameId) == 0;
+    });
+    bool isGameInLibrary =
+        context.watch<UserProvider>().user!.library!.any((e) {
       return e.gameId.compareTo(game.gameId) == 0;
     });
     return Padding(
@@ -61,42 +66,55 @@ class _GameCardState extends State<GameCard> {
                             padding: const EdgeInsets.only(left: 15, top: 10),
                             child: SizedBox(
                               width: 150,
-                              child: Text(
-                                game.name,
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.w600),
-                                overflow: TextOverflow.fade,
-                                maxLines: 1,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      game.name,
+                                      style: const TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.w600),
+                                      overflow: TextOverflow.fade,
+                                      maxLines: 1,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(left: 15, top: 8),
-                            child: Row(
-                              children: [
-                                ...List.generate(
-                                    game.genres.length,
-                                    (index) => Container(
-                                          margin: const EdgeInsets.symmetric(
-                                              horizontal: 2),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.white.withAlpha(40),
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          child: Text(
-                                            game.genres[index],
-                                            style: const TextStyle(
-                                              fontSize: 10,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ))
-                              ],
+                            child: SizedBox(
+                              width: 150,
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Row(
+                                  children: [
+                                    ...List.generate(
+                                        game.genres.length,
+                                        (index) => Container(
+                                              margin: const EdgeInsets.symmetric(
+                                                  horizontal: 2),
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 5),
+                                              decoration: BoxDecoration(
+                                                color: Colors.white.withAlpha(40),
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Text(
+                                                game.genres[index],
+                                                style: const TextStyle(
+                                                  fontSize: 10,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ))
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                           Padding(
@@ -123,9 +141,13 @@ class _GameCardState extends State<GameCard> {
                                 borderRadius: BorderRadius.circular(5),
                                 onTap: () {
                                   setState(() {
-                                    isGameInWishlist?
-                                    context.read<UserProvider>().removeGameFromWishlist(game):
-                                    context.read<UserProvider>().addGameToWishlist(game);
+                                    isGameInWishlist
+                                        ? context
+                                            .read<UserProvider>()
+                                            .removeGameFromWishlist(game)
+                                        : context
+                                            .read<UserProvider>()
+                                            .addGameToWishlist(game);
                                   });
                                 },
                                 child: Container(
@@ -136,7 +158,9 @@ class _GameCardState extends State<GameCard> {
                                           width: 1.5, color: Colors.white)),
                                   width: 40,
                                   height: 30,
-                                  child: Icon(isGameInWishlist?Icons.check:Icons.add),
+                                  child: Icon(isGameInWishlist
+                                      ? Icons.favorite_sharp
+                                      : Icons.favorite_border_sharp),
                                 ),
                               ),
                             ),
@@ -150,7 +174,12 @@ class _GameCardState extends State<GameCard> {
                                     isGameInCart
                                         ? Navigator.pushReplacementNamed(
                                             context, 'cartPage')
-                                        : context.read<UserProvider>().addGameToCart(game);
+                                        : isGameInLibrary
+                                            ? Navigator.pushReplacementNamed(
+                                                context, 'libraryPage')
+                                            : context
+                                                .read<UserProvider>()
+                                                .addGameToCart(game);
                                   });
                                 },
                                 child: Container(
@@ -163,7 +192,9 @@ class _GameCardState extends State<GameCard> {
                                   height: 30,
                                   child: Icon(isGameInCart
                                       ? Icons.shopping_cart_checkout_sharp
-                                      : Icons.add_shopping_cart_sharp),
+                                      : isGameInLibrary
+                                          ? Icons.auto_awesome_mosaic_sharp
+                                          : Icons.add_shopping_cart_sharp),
                                 ),
                               ),
                             )

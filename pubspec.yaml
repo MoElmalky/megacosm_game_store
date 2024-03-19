@@ -62,14 +62,38 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
-    - assets/rdr2/
-    - assets/starfield/
-    - assets/cp2077/
-    - assets/gow/
-    - assets/control/
-    - assets/blackRay/
-  #  - assets/rdr2/rdr2_screenshot-5.jpg
+    - assets/ #0
+    - assets/rdr2/ #1
+    - assets/starfield/ #2
+    - assets/cp2077/ #3
+    - assets/gow/ #4
+    - assets/control/ #5
+    - assets/blackRay/ #6
+    - assets/bg3/ #7
+    - assets/dd2/ #8
+    - assets/dead_cells/ #9
+    - assets/ea_fc_24/ #10
+    - assets/gta5/ #11
+    - assets/hades/ #12
+    - assets/helldivers/ #13
+    - assets/hk/ #14
+    - assets/hogwarts_legacy/ #15
+    - assets/ori/ #16
+    - assets/re4/ #17
+    - assets/sekiro/ #18
+    - assets/skyrim/ #19
+    - assets/thewitcher_3/ #20
+    - assets/tlos/ #21
+    - assets/elden_ring/ #22
+    - assets/ln2/ #23
+    - assets/spider-man/ #24
+    - assets/rot_tr/ #25
+    - assets/ds/ #26
+    - assets/fallout_4/ #27
+    - assets/aw2/ #28
+    - assets/pop/ #29
+    - assets/deathloop/ #30
+    - assets/borderlands3/ #31
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 

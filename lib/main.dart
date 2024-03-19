@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:megacosm_game_store/providers/filter_provider.dart';
 import 'package:megacosm_game_store/providers/rating_provider.dart';
 import 'package:megacosm_game_store/providers/user_provider.dart';
 import 'package:megacosm_game_store/views/cart_page.dart';
+import 'package:megacosm_game_store/views/checkout_page.dart';
+import 'package:megacosm_game_store/views/discover_page.dart';
 import 'package:megacosm_game_store/views/game_page.dart';
 import 'package:megacosm_game_store/views/home_page.dart';
 import 'package:megacosm_game_store/views/library_page.dart';
@@ -22,7 +25,9 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
-        ChangeNotifierProvider(create: (context) => RatingProvider())
+        ChangeNotifierProvider(create: (context) => RatingProvider()),
+        ChangeNotifierProvider(create: (context) => FilterProvider()),
+
       ],
       child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -34,6 +39,8 @@ class MyApp extends StatelessWidget {
             'cartPage': (context) => const CartPage(),
             'wishlistPage': (context) => const WishlistPage(),
             'libraryPage': (context) => const LibraryPage(),
+            'checkoutPage':(context) => const CheckoutPage(),
+            'discoverPage':(context) => const DiscoverPage(),
           },
           home: const LoginPage(),
           theme: ThemeData.dark()),

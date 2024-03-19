@@ -4,7 +4,7 @@ import 'package:megacosm_game_store/models/rating_model.dart';
 
 class RatingProvider extends ChangeNotifier{
   void addRating(Game game,Rating rating){
-    game.ratings!.insert(0,rating);
+    game.ratings.insert(0,rating);
     notifyListeners();
   }
 }

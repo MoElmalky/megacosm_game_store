@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:megacosm_game_store/data/games_data.dart';
+import 'package:megacosm_game_store/utils/blackRay_app_bar.dart';
 import 'package:megacosm_game_store/utils/user_option_drawer.dart';
 import 'package:megacosm_game_store/widgets/auto_carousel_game_slider.dart';
-import 'package:megacosm_game_store/widgets/game_card.dart';
 import 'package:megacosm_game_store/widgets/horizontal_game_viewer.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,54 +16,25 @@ class HomePage extends StatelessWidget {
     return Scaffold(
         endDrawer: UserOptionsDrawer(),
         backgroundColor: mainBlack,
-        appBar: AppBar(
-          backgroundColor: mainBlack,
-          surfaceTintColor: mainBlack,
-          title: Row(
-            children: [
-              ImageIcon(
-                AssetImage('assets/blackRay/blackRay_logo_white.png'),
-                size: 40,
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top:8),
-                child: Image.asset('assets/blackRay/blackRay_white.png',width: 100,fit: BoxFit.cover,),
-              ),
-            ],
-          ),
-          actions: [
-            Builder(
-              builder: (context) => IconButton(
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-                icon: Icon(
-                  Icons.view_headline_sharp,
-                  size: 30,
-                  color: Colors.grey[100],
-                ),
-              ),
-            ),
-          ],
-        ),
+        appBar: BlackRayAppBar(),
         body: ListView(
           children: [
-            AutoCarouselGameSlider(list: games),
+            AutoCarouselGameSlider(list: featuredGames),
             SizedBox(
               height: 20,
             ),
-            HorizontalGameViewer(list: games, label: "On Sale"),
+            HorizontalGameViewer(list: onSale, label: "On Sale"),
+            SizedBox(height: 20,),
+            HorizontalGameViewer(list: newReleases, label: "New Releases"),
+            SizedBox(height: 20,),
+            HorizontalGameViewer(list: topSellers, label: "Top Sellers"),
+            SizedBox(height: 20,),
+            HorizontalGameViewer(list: mostPlayed, label: "Most Played"),
+            SizedBox(height: 20,),
+            HorizontalGameViewer(list: mostPopular, label: "Most Popular"),
             SizedBox(
               height: 20,
             ),
-            ...games.map(
-              (e) {
-                return GameCard(game: e);
-              },
-            ).toList()
           ],
         ));
   }

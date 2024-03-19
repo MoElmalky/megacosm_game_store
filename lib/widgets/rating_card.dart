@@ -19,14 +19,13 @@ class _RatingCardState extends State<RatingCard> {
   final Game game;
 
   _RatingCardState(this.game);
-  TextEditingController test1 = TextEditingController();
-  TextEditingController test2 = TextEditingController();
+  TextEditingController commentController = TextEditingController();
   int rating = 1;
   double totalRatings = 0;
   @override
   Widget build(BuildContext context) {
     String username = context.watch<UserProvider>().user!.username;
-    bool rated = game.ratings!.any((e) {
+    bool rated = game.ratings.any((e) {
       return e.username == username;
     });
     return Container(
@@ -35,8 +34,67 @@ class _RatingCardState extends State<RatingCard> {
       margin: EdgeInsets.only(bottom: 20),
       child: Column(children: [
         Container(
-          child: Text(totalRatings.toString()),
-        ),
+            padding: EdgeInsets.all(10),
+            margin: EdgeInsets.symmetric(vertical: 10, horizontal: 5),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(5),
+              color: Colors.black26,
+            ),
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Text('Players Ratings',
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold
+                    ),
+                    )
+                  ],
+                ),
+                Divider(),
+                Text(
+                  game.totalRatings.toString(),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ...List.generate(5, (index) {
+                      return ShaderMask(
+                        shaderCallback: (rect) {
+                          return LinearGradient(
+                            stops: [
+                              0,
+                              (game.totalRatings - index > 0)
+                                  ? game.totalRatings - index
+                                  : 0,
+                              (game.totalRatings - index > 0)
+                                  ? game.totalRatings - index
+                                  : 0
+                            ],
+                            colors: [
+                              Colors.white,
+                              Colors.white,
+                              Colors.white24
+                            ],
+                          ).createShader(rect);
+                        },
+                        child: Icon(
+                          Icons.star,
+                          color: Colors.grey[50],
+                          size: 40,
+                        ),
+                      );
+                    })
+                  ],
+                ),
+                SizedBox(height: 10,)
+              ],
+            )),
         rated
             ? SizedBox()
             : Container(
@@ -63,7 +121,6 @@ class _RatingCardState extends State<RatingCard> {
                                   onTap: () {
                                     setState(() {
                                       rating = index + 1;
-                                      print(totalRatings);
                                     });
                                   },
                                   child: Icon(
@@ -81,7 +138,7 @@ class _RatingCardState extends State<RatingCard> {
                     TextFormField(
                       cursorColor: Colors.white,
                       maxLines: null,
-                      controller: test2,
+                      controller: commentController,
                       decoration: InputDecoration(
                           fillColor: Colors.grey[900],
                           border: InputBorder.none,
@@ -90,18 +147,20 @@ class _RatingCardState extends State<RatingCard> {
                           suffixIcon: InkWell(
                               onTap: () {
                                 setState(() {
-                                  for (var e in game.ratings!) {
-                                    totalRatings += e.rating;
-                                  }
-                                  totalRatings = double.parse(
-                                      (totalRatings / game.ratings!.length)
-                                          .toStringAsFixed(1));
                                   context.read<RatingProvider>().addRating(
                                       game,
                                       Rating(
                                           rating: rating,
-                                          comment: test2.text,
+                                          comment: commentController.text,
                                           username: username));
+                                  totalRatings = 0;
+                                  for (var e in game.ratings) {
+                                    totalRatings += e.rating;
+                                  }
+                                  totalRatings = double.parse(
+                                      (totalRatings / game.ratings.length)
+                                          .toStringAsFixed(1));
+                                  game.totalRatings = totalRatings;
                                 });
                               },
                               child: Icon(
@@ -112,7 +171,7 @@ class _RatingCardState extends State<RatingCard> {
                   ],
                 ),
               ),
-        ...List.generate(game.ratings!.length, (index) {
+        ...List.generate(game.ratings.length, (index) {
           return Container(
             padding: EdgeInsets.all(10),
             margin: EdgeInsets.only(top: 10, left: 5, right: 5),
@@ -125,14 +184,14 @@ class _RatingCardState extends State<RatingCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      game.ratings![index].username,
+                      game.ratings[index].username,
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Row(
                       children: [
                         for (int i = 0; i < 5; i++) ...{
-                          if ((game.ratings![index].rating) - i > 0) ...{
+                          if ((game.ratings[index].rating) - i > 0) ...{
                             Icon(
                               Icons.star,
                               color: Colors.white,
@@ -150,7 +209,7 @@ class _RatingCardState extends State<RatingCard> {
                 ),
                 Divider(),
                 Text(
-                  game.ratings![index].comment,
+                  game.ratings[index].comment,
                   style: TextStyle(fontSize: 18),
                 )
               ],

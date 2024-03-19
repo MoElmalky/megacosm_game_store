@@ -27,11 +27,46 @@ class User {
 
 List<User> users = [
   User(
-    firstName: 'Fast',
+    firstName: 'Quick',
     lastName: 'Access',
-    username: 'dev',
+    username: 'dev_1',
     email: '1',
     password: '1',
+  ),
+  User(
+    firstName: 'Quick',
+    lastName: 'Access',
+    username: 'dev_2',
+    email: '2',
+    password: '2',
+  ),
+  User(
+    firstName: 'Quick',
+    lastName: 'Access',
+    username: 'dev_3',
+    email: '3',
+    password: '3',
+  ),
+  User(
+    firstName: 'Quick',
+    lastName: 'Access',
+    username: 'dev_4',
+    email: '4',
+    password: '4',
+  ),
+  User(
+    firstName: 'Quick',
+    lastName: 'Access',
+    username: 'dev_5',
+    email: '5',
+    password: '5',
+  ),
+  User(
+    firstName: 'Quick',
+    lastName: 'Access',
+    username: 'dev_6',
+    email: '6',
+    password: '6',
   ),
   User(
     firstName: 'Mohamed',
