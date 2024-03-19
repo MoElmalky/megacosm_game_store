@@ -1,16 +1,13 @@
-# megacosm_game_store
+# blackray_game_store
 
-A new Flutter project.
+This is a test version and the only purpose of this project is education.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## About
 
-A few resources to get you started if this is your first Flutter project:
+Black Ray isn't a real game storefront.
+The UI is inspired from the epic games store.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+made by # Mohamed Elmalky
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
